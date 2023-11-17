@@ -86,7 +86,7 @@ namespace Society.View
                     if (result2.success)
                     {
 
-                        Employee.SaveEmployeeID();
+                        User.SaveEmployeeID();
                         HomeView homeView = new HomeView();
                         homeView.Show();
                     }
@@ -156,7 +156,7 @@ namespace Society.View
                         var result2 = DB_Connect.GetFillEmployeeByLogin(LoginText);
                         if (result2.success)
                         {
-                            Employee.SaveEmployeeID();
+                            User.SaveEmployeeID();
                             HomeView homeView = new HomeView();
                             homeView.Show();
                         }

@@ -16,7 +16,7 @@ namespace Society
                 LoadEmployeeDataFromFile();
             }
 
-            if (Employee.ID_Employee == -1)
+            if (User.ID_Employee == -1)
             {
                 LoginView loginView = new LoginView();
                 loginView.Show();
@@ -34,13 +34,13 @@ namespace Society
             string content = File.ReadAllText(EmployeeIdFilePath);
             if (int.TryParse(content, out int id))
             {
-                Employee.ID_Employee = id;
-                Employee.LoadEmployeeData();
+                User.ID_Employee = id;
+                User.LoadEmployeeData();
             }
 
             else
             {
-                Employee.ClearEmployeeID();
+                User.ClearEmployeeID();
             }
         }
     }
