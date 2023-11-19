@@ -85,10 +85,11 @@
                     </RadioButton>
                     <RadioButton Style="{StaticResource menuButton}"
                                  Tag="{StaticResource color4}"
+                                 IsChecked="{Binding IsPage3Selected}"
                                  Command="{Binding ShowCustomerViewCommand}" GroupName="NavMenu">
                         <StackPanel Orientation="Horizontal">
-                            <fa:IconImage Icon="ShoppingBag" Style="{StaticResource menuButtonIcon}"/>
-                            <TextBlock Text="Transaction" Style="{StaticResource menuButtonText}"/>
+                            <fa:IconImage Icon="BookOpenReader" Style="{StaticResource menuButtonIcon}"/>
+                            <TextBlock Text="Кружки" Style="{StaticResource menuButtonText}"/>
                         </StackPanel>
                     </RadioButton>
                     <RadioButton Style="{StaticResource menuButton}"

@@ -79,10 +79,10 @@ namespace Society.View
 
             if (Valid_LogPas(LoginText, PasswordText))
             {
-                var result = DB_Connect.CheckLogin(LoginText, PasswordText);
+                var result = DB_Interaction.CheckLogin(LoginText, PasswordText);
                 if (result.success)
                 {
-                    var result2 = DB_Connect.GetFillEmployeeByLogin(LoginText);
+                    var result2 = DB_Interaction.GetFillEmployeeByLogin(LoginText);
                     if (result2.success)
                     {
 
@@ -119,7 +119,7 @@ namespace Society.View
 
                 if (Valid_LogPas(LoginText, PasswordText))
                 {
-                    var result = DB_Connect.LoginNoExists(LoginText);
+                    var result = DB_Interaction.LoginNoExists(LoginText);
                     if (result.success)
                     {
                         StatePage = 1;
@@ -150,10 +150,10 @@ namespace Society.View
                 PatronymicText = Patronymic_TextBox.Text;
                 if (ValidName(PatronymicText, ErrorPatronymic_TextBlock))
                 {
-                    var result = DB_Connect.AddEmployee(NameText, SurnameText, PatronymicText, LoginText, PasswordText);
+                    var result = DB_Interaction.AddEmployee(NameText, SurnameText, PatronymicText, LoginText, PasswordText);
                     if (result.success)
                     {
-                        var result2 = DB_Connect.GetFillEmployeeByLogin(LoginText);
+                        var result2 = DB_Interaction.GetFillEmployeeByLogin(LoginText);
                         if (result2.success)
                         {
                             User.SaveEmployeeID();

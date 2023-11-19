@@ -63,23 +63,42 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DB\DB_Auth.cs" />
+    <Compile Include="DB\DB_Employee.cs" />
+    <Compile Include="DB\DB_Society.cs" />
+    <Compile Include="DB\DB_Student.cs" />
     <Compile Include="Model\Employee.cs" />
+    <Compile Include="Model\Lesson.cs" />
+    <Compile Include="Model\Role.cs" />
+    <Compile Include="Model\SocietyClass.cs" />
+    <Compile Include="Model\SocietyEmployee.cs" />
+    <Compile Include="Model\Student.cs" />
+    <Compile Include="Model\StudentSociety.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="DB\DB_Connect.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="View\AddSocietyView.xaml.cs">
+      <DependentUpon>AddSocietyView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\HomeView.xaml.cs">
       <DependentUpon>HomeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\InfoSocietyView.xaml.cs">
+      <DependentUpon>InfoSocietyView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\LoginView.xaml.cs">
       <DependentUpon>LoginView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Student.xaml.cs">
-      <DependentUpon>Student.xaml</DependentUpon>
+    <Compile Include="View\SocietyControl.xaml.cs">
+      <DependentUpon>SocietyControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Teacher.xaml.cs">
-      <DependentUpon>Teacher.xaml</DependentUpon>
+    <Compile Include="View\StudentControl.xaml.cs">
+      <DependentUpon>StudentControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\TeacherControl.xaml.cs">
+      <DependentUpon>TeacherControl.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -126,7 +145,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\AddSocietyView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\HomeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\InfoSocietyView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -134,11 +161,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Student.xaml">
+    <Page Include="View\SocietyControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Teacher.xaml">
+    <Page Include="View\StudentControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\TeacherControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -1,37 +1,37 @@
 ﻿using Society.Model;
-using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Windows;
 using System.Windows.Controls;
+using System.Windows;
+using System;
 
 namespace Society.View
 {
-    /// <summary>
-    /// Логика взаимодействия для Teacher.xaml
-    /// </summary>
-    public partial class Teacher : System.Windows.Controls.UserControl
+    public partial class TeacherControl : UserControl
     {
         DataTable dataTable;
         private bool isSearchBoxEmpty = true;
 
-        public Teacher()
+        public TeacherControl()
         {
             InitializeComponent();
-
             LoadDataGrid();
+            Teacher_DataGrid.Loaded += (sender, e) => CustomizationTables();
         }
 
         private void LoadDataGrid()
         {
             dataTable = new DataTable("Employees");
-            List<Employee> employees = DB_Connect.GetEmployees();
+            List<Employee> employees = DB_Interaction.GetEmployees();
 
-            dataTable.Columns.Add("ID", typeof(int));
-            dataTable.Columns.Add("Имя", typeof(string));
-            dataTable.Columns.Add("Фамилия", typeof(string));
-            dataTable.Columns.Add("Отчество", typeof(string));
+            dataTable.Columns.AddRange(new DataColumn[]
+            {
+                new DataColumn("ID", typeof(int)),
+                new DataColumn("Имя", typeof(string)),
+                new DataColumn("Фамилия", typeof(string)),
+                new DataColumn("Отчество", typeof(string)),
+            });
 
             foreach (Employee employee in employees)
             {
@@ -44,8 +44,6 @@ namespace Society.View
             }
 
             Teacher_DataGrid.ItemsSource = dataTable.DefaultView;
-
-            Teacher_DataGrid.Loaded += (sender, e) => CustomizationTables();
         }
 
         private void CustomizationTables()
@@ -61,24 +59,32 @@ namespace Society.View
 
         private void Save_Button_Click(object sender, RoutedEventArgs e)
         {
-            DB_Connect.UpdateEmployees(dataTable);
+            DB_Interaction.UpdateEmployees(dataTable);
         }
 
         private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            // Проверяем, что dataTable не является null
             if (dataTable == null)
             {
-                // Можно выполнить какие-то дополнительные действия или просто выйти из метода
                 return;
             }
 
             string searchText = SearchTextBox.Text;
 
-            // Создаем новый DataTable для хранения совпадающих строк
+            DataTable filteredDataTable = FilterDataTable(searchText);
+
+            Teacher_DataGrid.ItemsSource = filteredDataTable.DefaultView;
+
+            if (Teacher_DataGrid.Columns.Count > 0)
+            {
+                CustomizationTables();
+            }
+        }
+
+        private DataTable FilterDataTable(string searchText)
+        {
             DataTable filteredDataTable = dataTable.Clone();
 
-            // Фильтруем строки в оригинальном DataTable и добавляем совпадающие в новый DataTable
             foreach (DataRow row in dataTable.Rows)
             {
                 foreach (var columnValue in row.ItemArray)
@@ -86,24 +92,18 @@ namespace Society.View
                     if (columnValue.ToString().IndexOf(searchText, StringComparison.OrdinalIgnoreCase) >= 0)
                     {
                         filteredDataTable.ImportRow(row);
-                        break; // Добавляем строку только один раз
+                        break;
                     }
                 }
             }
 
-            // Устанавливаем новый DataTable в качестве источника данных для DataGrid
-            Teacher_DataGrid.ItemsSource = filteredDataTable.DefaultView;
-
-            CustomizationTables();
+            return filteredDataTable;
         }
 
         private void SearchTextBox_GotFocus(object sender, RoutedEventArgs e)
         {
-            if (isSearchBoxEmpty)
-            {
-                SearchTextBox.Text = "";
-                isSearchBoxEmpty = false;
-            }
+            SearchTextBox.Text = isSearchBoxEmpty ? "" : SearchTextBox.Text;
+            isSearchBoxEmpty = false;
         }
 
         private void Reser_Button_Click(object sender, RoutedEventArgs e)

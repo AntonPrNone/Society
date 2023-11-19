@@ -25,7 +25,7 @@ namespace Society.Model
                 if (int.TryParse(content, out int id))
                 {
                     ID_Employee = id;
-                    if (!DB_Connect.LoadEmployeeData())
+                    if (!DB_Interaction.LoadEmployeeData())
                     {
                         ClearEmployeeID();
                     }

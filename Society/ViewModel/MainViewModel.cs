@@ -11,8 +11,9 @@ namespace Society.ViewModel
 {
     public class MainViewModel : INotifyPropertyChanged
     {
-        Teacher teacher = new Teacher();
-        Student student = new Student();
+        TeacherControl teacher = new TeacherControl();
+        StudentControl student = new StudentControl();
+        SocietyControl society = new SocietyControl();
 
         private UserControl _currentChildView;
         public UserControl CurrentChildView
@@ -57,7 +58,23 @@ namespace Society.ViewModel
             }
         }
 
-        // Добавьте аналогичные свойства для каждой страницы
+
+        private bool _isPage3Selected;
+        public bool IsPage3Selected
+        {
+            get => _isPage3Selected;
+            set
+            {
+                _isPage3Selected = value;
+                if (value)
+                {
+                    // При выборе страницы 2 устанавливаем соответствующий UserControl
+                    CurrentChildView = society;
+                }
+                OnPropertyChanged(nameof(IsPage3Selected));
+
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
