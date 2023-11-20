@@ -52,6 +52,96 @@ public static partial class DB_Interaction
         }
     }
 
+    public static List<Student> GetStudentsBySociety(int societyID)
+    {
+        OpenConnection();
+
+        List<Student> students = new List<Student>();
+
+        using (SqlCommand cmd = new SqlCommand())
+        {
+            cmd.Connection = _connection;
+            cmd.CommandType = CommandType.Text;
+
+            // Получаем ID студентов, участвующих в указанном кружке
+            cmd.CommandText = "SELECT ID_Student FROM StudentSociety_table WHERE ID_Society = @SocietyID";
+            cmd.Parameters.AddWithValue("@SocietyID", societyID);
+
+            try
+            {
+                List<int> studentIds = new List<int>();
+
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        studentIds.Add(Convert.ToInt32(reader["ID_Student"]));
+                    }
+                }
+
+                // Получаем информацию о каждом студенте по его ID
+                foreach (int studentId in studentIds)
+                {
+                    Student student = GetStudentById(studentId);
+                    if (student != null)
+                    {
+                        students.Add(student);
+                    }
+                }
+
+                return students;
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка при получении данных студентов по кружку: {ex.Message}");
+                return null;
+            }
+        }
+    }
+
+    private static Student GetStudentById(int studentId)
+    {
+        using (SqlCommand cmd = new SqlCommand())
+        {
+            cmd.Connection = _connection;
+            cmd.CommandType = CommandType.Text;
+
+            // Получаем информацию о студенте по его ID
+            cmd.CommandText = "SELECT * FROM Student_table WHERE ID_Student = @StudentID";
+            cmd.Parameters.AddWithValue("@StudentID", studentId);
+
+            try
+            {
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        return new Student
+                        {
+                            ID_Student = Convert.ToInt32(reader["ID_Student"]),
+                            Name = reader["Name"].ToString(),
+                            Surname = reader["Surname"].ToString(),
+                            Patronymic = reader["Patronymic"].ToString(),
+                            DateOfBirth = Convert.ToDateTime(reader["DateOfBirth"])
+                        };
+                    }
+
+                    else
+                    {
+                        Console.WriteLine($"Студент с ID {studentId} не найден.");
+                        return null;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка при получении данных студента: {ex.Message}");
+                return null;
+            }
+        }
+    }
+
     public static (bool success, string errorMessage) AddStudent(string name, string surname, string patronymic, DateTime dateOfBirth)
     {
         OpenConnection();

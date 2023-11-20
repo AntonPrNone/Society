@@ -79,4 +79,34 @@ public static partial class DB_Interaction
         }
     }
 
+    public static bool UpdateSociety(int id, string name, int maxStudent, int numberHour)
+    {
+        try
+        {
+            OpenConnection();
+
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.Connection = _connection;
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "UPDATE Society_table SET Name = @Name, MaxStudent = @MaxStudent, NumberHour = @NumberHour WHERE ID_Society = @ID";
+
+                cmd.Parameters.AddWithValue("@ID", id);
+                cmd.Parameters.AddWithValue("@Name", name);
+                cmd.Parameters.AddWithValue("@MaxStudent", maxStudent);
+                cmd.Parameters.AddWithValue("@NumberHour", numberHour);
+
+                // Выполняем команду
+                int rowsAffected = cmd.ExecuteNonQuery();
+
+                // Возвращаем true, если хотя бы одна строка была изменена
+                return rowsAffected > 0;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Ошибка при обновлении данных о кружке: {ex.Message}");
+            return false;
+        }
+    }
 }

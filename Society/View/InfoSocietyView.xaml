@@ -42,10 +42,135 @@
                 </Border.Background>
 
                 <StackPanel>
-                    <StackPanel Orientation="Horizontal" Height="35" Margin="5, 25, 5, 40" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0">
+                    <StackPanel Orientation="Horizontal" Height="35" Margin="5, 25, 5, 25" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0">
                         <fa:IconImage Icon="BookOpenReader" Style="{StaticResource menuButtonIcon}" Foreground="{StaticResource color4}" Margin="0,0,20,0" Width="28"/>
-                        <TextBlock Text="Добавление кружка" Style="{StaticResource menuButtonText}" Foreground="{StaticResource color4}"  FontSize="16"/>
+                        <TextBlock Text="Изменение кружка" Style="{StaticResource menuButtonText}" Foreground="{StaticResource color4}"  FontSize="16"/>
                     </StackPanel>
+
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" MinWidth="200" Margin="20,0,20,0">
+                        <StackPanel x:Name="Form1_StackPanel" Height="300">
+                            <TextBlock Text="Название"
+                                Foreground="{StaticResource color4}"
+                                FontSize="12"
+                                FontWeight="Medium"   
+                                FontFamily="Montserrat"
+                                Margin="0,25,0,0"/>
+                            
+                            <TextBox x:Name="Name_TextBox"
+                                 FontSize="13"
+                                 FontWeight="Medium"
+                                 FontFamily="Montserrat"                            
+                                 Foreground="White"
+                                 CaretBrush="LightGray"
+                                 BorderBrush="{StaticResource color4}"
+                                 BorderThickness="0,0,0,2"
+                                 Height="28"
+                                 VerticalContentAlignment="Center"
+                                 Margin="0,5,0,0"
+                                 Background="Transparent">
+                            </TextBox>
+                            <TextBlock x:Name="ErrorName_TextBlock" Foreground="#D7596D" FontWeight="Medium" Margin="0,5,0,0" TextWrapping="Wrap"/>
+
+                            <TextBlock Foreground="{StaticResource color4}"
+                                FontSize="12"
+                                FontWeight="Medium"
+                                FontFamily="Montserrat"
+                                Margin="0,25,0,0">
+                                <Run Text="Макс. учеников" />
+                                <Run Text=" (По ум. 15)" Foreground="Gray" FontSize="10"/>
+                            </TextBlock>
+
+                            <TextBox x:Name="MaxStudent_TextBox"
+                                 FontSize="13"
+                                 FontWeight="Medium"
+                                 FontFamily="Montserrat"                            
+                                 Foreground="White"
+                                 CaretBrush="LightGray"
+                                 BorderBrush="{StaticResource color4}"
+                                 BorderThickness="0,0,0,2"
+                                 Height="28"
+                                 VerticalContentAlignment="Center"
+                                 Margin="0,5,0,0"
+                                 Background="Transparent">
+                            </TextBox>
+                            <TextBlock x:Name="ErrorMaxStudent_TextBlock" Foreground="#D7596D" FontWeight="Medium" Margin="0,5,0,0" TextWrapping="Wrap"/>
+
+                            <TextBlock Text="Кол-во часов"
+                                Foreground="{StaticResource color4}"
+                                FontSize="12"
+                                FontWeight="Medium"   
+                                FontFamily="Montserrat"
+                                Margin="0,25,0,0"/>
+                                            <TextBox x:Name="NumberHour_TextBox"
+                                 FontSize="13"
+                                 FontWeight="Medium"
+                                 FontFamily="Montserrat"                            
+                                 Foreground="White"
+                                 CaretBrush="LightGray"
+                                 BorderBrush="{StaticResource color4}"
+                                 BorderThickness="0,0,0,2"
+                                 Height="28"
+                                 VerticalContentAlignment="Center"
+                                 Margin="0,5,0,0"
+                                 Background="Transparent">
+                            </TextBox>
+                            <TextBlock x:Name="ErrorNumberHour_TextBlock" Foreground="#D7596D" FontWeight="Medium" Margin="0,5,0,0" TextWrapping="Wrap"/>
+                        </StackPanel>
+                        <Button x:Name="Save_Button"                          
+                            BorderThickness="0"
+                            Content="Сохранить"
+                            Foreground="White"
+                            FontSize="12"
+                            Cursor="Hand"                           
+                            Margin="0,20,0,0" FontWeight="Bold" IsDefault="True" Click="Save_Button_Click">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Background" Value="#462AD8"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#28AEED"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Width="150" Height="40"
+                                        CornerRadius="20"
+                                        Background="{TemplateBinding Background}">
+                                        <ContentPresenter VerticalAlignment="Center"
+                                        HorizontalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Height="35" Margin="5,40,5,25" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0">
+                        <fa:IconImage Icon="PersonChalkboard" Style="{StaticResource menuButtonIcon}" Foreground="{StaticResource color3}" Margin="0,0,20,0" Width="28"/>
+                        <TextBlock Text="Ученики" Style="{StaticResource menuButtonText}" Foreground="{StaticResource color3}"  FontSize="16"/>
+                    </StackPanel>
+                    <Border BorderBrush="{StaticResource color3}" BorderThickness="1"  Margin="20,10,20,10" Padding="10, 20" VerticalAlignment="Top" CornerRadius="15" Cursor="Hand" MouseLeftButtonDown="Border_MouseLeftButtonDown">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <SolidColorBrush Color="White" Opacity="0.1"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <StackPanel>
+                             <TextBlock>
+                                <Run Text="Кол-во учеников: " FontSize="16" Foreground="#FFBCBEE0" />
+                                <Run x:Name="СountStudent_RunTextBlock" Text="" FontSize="16" Foreground="#FFBCBEE0" FontWeight="Bold"/>
+                            </TextBlock>
+                        </StackPanel>
+                    </Border>
                 </StackPanel>
             </Border>
             <!--Main Section-->
@@ -61,6 +186,8 @@
                     <Grid.RowDefinitions>
                         <!--Control bar-->
                         <RowDefinition Height="25"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="50"/>
                         <!--Content section / Child views-->
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
@@ -92,9 +219,109 @@
                             <fa:IconImage Icon="WindowMinimize" Width="12" Style="{StaticResource controlButtonIcon}"/>
                         </Button>
                     </StackPanel>
+                    <StackPanel Orientation="Horizontal" Height="35" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0" Grid.Row="1">
+                        <fa:IconImage Icon="Chalkboard" Style="{StaticResource menuButtonIcon}" Foreground="{StaticResource color5}" Margin="0,0,20,0" Width="28"/>
+                        <TextBlock Text="Занятия" Style="{StaticResource menuButtonText}" Foreground="{StaticResource color5}"  FontSize="16"/>
+                    </StackPanel>
+                    <Grid Grid.Row="2" Margin="25,0,25,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="250"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
+                            <fa:IconImage Icon="Search" Width="20" Height="20" Foreground="{StaticResource plainTextColor3}"/>
+                            <TextBox x:Name="SearchTextBox" Text="Поиск..." 
+                                 FontSize="13" 
+                                 Height="24" 
+                                 Width="300" 
+                                 Background="Transparent" 
+                                 FontWeight="Medium" FontFamily="Montserrat" 
+                                 Foreground="{StaticResource plainTextColor3}" 
+                                 CaretBrush="{DynamicResource plainTextColor3}" 
+                                 BorderBrush="{DynamicResource plainTextColor3}" 
+                                 BorderThickness="0,0,0,1" 
+                                 VerticalContentAlignment="Center" 
+                                 Margin="5,5,0,0" TextChanged="SearchTextBox_TextChanged" GotFocus="SearchTextBox_GotFocus"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button x:Name="Add_Button" 
+                                Content="Добавить" 
+                                FontSize="12" 
+                                FontFamily="Montserrat" 
+                                Cursor="Hand" 
+                                BorderThickness="0" 
+                                Foreground="White" 
+                                VerticalAlignment="Top" Width="120" Click="Add_Button_Click">
+                                <Button.Style>
+                                    <Style TargetType="Button">
+                                        <Setter Property="Background" Value="#773DFF"/>
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="Button">
+                                                    <Border Height="30" 
+                                                CornerRadius="15" 
+                                                Background="{TemplateBinding Background}">
+                                                        <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="#836EFB"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
                     <!--Header / Caption-->
-                    <Border Grid.Row="1">
-                        
+                    <Border CornerRadius="10" Margin="25,0,25,25" Grid.Row="3" Padding="10" Background="#200F53">
+                        <ScrollViewer VerticalScrollBarVisibility="Hidden">
+                            <ItemsControl x:Name="Lesson_ItemControl">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel Orientation="Horizontal"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border BorderBrush="{StaticResource color5}" BorderThickness="1"  Margin="10" Padding="10" VerticalAlignment="Top" CornerRadius="15" Cursor="Hand" MouseLeftButtonDown="Border_MouseLeftButtonDown">
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Setter Property="Background" Value="Transparent"/>
+                                                    <Style.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter Property="Background">
+                                                                <Setter.Value>
+                                                                    <SolidColorBrush Color="White" Opacity="0.1"/>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </Trigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+                                            <StackPanel>
+                                                <TextBlock Text="{Binding Date}" FontSize="18" Foreground="{StaticResource color5}" HorizontalAlignment="Center" Margin="0, 0, 0, 5"/>
+                                                <TextBlock>
+                                                    <Run Text="Кабинет: " FontSize="16" Foreground="#FFBCBEE0" />
+                                                    <Run Text="{Binding CabinetNumber}" FontSize="16" Foreground="#FFBCBEE0" FontWeight="Bold"/>
+                                                </TextBlock>
+                                                <TextBlock>
+                                                    <Run Text="Время начала: " FontSize="16" Foreground="#FFBCBEE0" />
+                                                    <Run Text="{Binding StartTime}" FontSize="16" Foreground="#FFBCBEE0" FontWeight="Bold" />
+                                                </TextBlock>
+                                                <TextBlock>
+                                                    <Run Text="Время конца: " FontSize="16" Foreground="#FFBCBEE0" />
+                                                    <Run Text="{Binding EndTime}" FontSize="16" Foreground="#FFBCBEE0" FontWeight="Bold" />
+                                                </TextBlock>
+                                            </StackPanel>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
                     </Border>
                 </Grid>
             </Border>

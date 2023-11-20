@@ -65,6 +65,7 @@
     </Compile>
     <Compile Include="DB\DB_Auth.cs" />
     <Compile Include="DB\DB_Employee.cs" />
+    <Compile Include="DB\DB_Lesson.cs" />
     <Compile Include="DB\DB_Society.cs" />
     <Compile Include="DB\DB_Student.cs" />
     <Compile Include="Model\Employee.cs" />
@@ -96,6 +97,9 @@
     </Compile>
     <Compile Include="View\StudentControl.xaml.cs">
       <DependentUpon>StudentControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\StudentsSocietyView.xaml.cs">
+      <DependentUpon>StudentsSocietyView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\TeacherControl.xaml.cs">
       <DependentUpon>TeacherControl.xaml</DependentUpon>
@@ -166,6 +170,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\StudentControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\StudentsSocietyView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

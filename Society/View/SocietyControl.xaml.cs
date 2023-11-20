@@ -11,15 +11,13 @@ namespace Society.View
         List<SocietyClass> societyClasses = new List<SocietyClass>();
         private bool isSearchBoxEmpty = true;
         AddSocietyView addSocietyView;
+        InfoSocietyView infoSocietyView;
 
         public SocietyControl()
         {
             InitializeComponent();
             societyClasses = DB_Interaction.GetSocieties();
             Society_ItemControl.ItemsSource = societyClasses;
-
-
-
         }
 
         private void AddSocietyView_SocietyAdded(object sender, EventArgs e)
@@ -54,7 +52,8 @@ namespace Society.View
             SocietyClass selectedSociety = (SocietyClass)((Border)sender).DataContext;
 
             // Создаем новое окно
-            InfoSocietyView infoSocietyView = new InfoSocietyView(selectedSociety);
+            infoSocietyView = new InfoSocietyView(selectedSociety);
+            infoSocietyView.SocietySaved += AddSocietyView_SocietyAdded;
 
             // Открываем новое окно
             infoSocietyView.Show();
