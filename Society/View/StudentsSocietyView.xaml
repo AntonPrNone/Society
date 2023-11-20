@@ -101,7 +101,7 @@
                                 Cursor="Hand" 
                                 BorderThickness="0" 
                                 Foreground="White" 
-                                VerticalAlignment="Top" Width="120" Margin="10,0,0,0" Click="Save_Button_Click">
+                                VerticalAlignment="Top" Width="120" Margin="10,0,0,0" Click="Add_Button_Click">
                                 <Button.Style>
                                     <Style TargetType="Button">
                                         <Setter Property="Background" Value="#773DFF"/>

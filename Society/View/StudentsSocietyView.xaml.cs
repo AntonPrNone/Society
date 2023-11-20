@@ -123,16 +123,6 @@ namespace Society.View
             else this.WindowState = WindowState.Normal;
         }
 
-        private void Reser_Button_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void Save_Button_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void Delete_Button_Click(object sender, RoutedEventArgs e)
         {
             // Получаем кнопку, на которую было произведено нажатие
