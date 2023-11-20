@@ -389,4 +389,66 @@ public static partial class DB_Interaction
         }
     }
 
+    public static (bool success, string errorMessage) AddStudentSocietyLink(int studentId, int societyId)
+    {
+        OpenConnection();
+
+        using (SqlTransaction transaction = _connection.BeginTransaction())
+        {
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.Connection = _connection;
+                cmd.Transaction = transaction;
+                cmd.CommandType = CommandType.Text;
+
+                try
+                {
+                    // Проверяем, существует ли ученик с указанным ID
+                    if (!StudentExists(studentId))
+                    {
+                        transaction.Rollback();
+                        return (false, "Ученик с указанным ID не найден.");
+                    }
+
+                    // Проверяем, существует ли кружок с указанным ID
+                    if (!SocietyExists(societyId))
+                    {
+                        transaction.Rollback();
+                        return (false, "Кружок с указанным ID не найден.");
+                    }
+
+                    // Добавляем связь между учеником и кружком
+                    cmd.CommandText = "INSERT INTO StudentSociety_table (ID_Student, ID_Society) VALUES (@StudentID, @SocietyID)";
+                    cmd.Parameters.AddWithValue("@StudentID", studentId);
+                    cmd.Parameters.AddWithValue("@SocietyID", societyId);
+
+                    cmd.ExecuteNonQuery();
+                    transaction.Commit();
+                    return (true, null);
+                }
+
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    Console.WriteLine($"Ошибка при добавлении связи между учеником и кружком: {ex.Message}");
+                    return (false, "Произошла ошибка при добавлении связи между учеником и кружком");
+                }
+            }
+        }
+    }
+
+    private static bool SocietyExists(int societyId)
+    {
+        using (SqlCommand cmd = new SqlCommand())
+        {
+            cmd.Connection = _connection;
+            cmd.CommandType = CommandType.Text;
+
+            cmd.CommandText = "SELECT COUNT(*) FROM Society_table WHERE ID_Society = @ID";
+            cmd.Parameters.AddWithValue("@ID", societyId);
+
+            return (int)cmd.ExecuteScalar() > 0;
+        }
+    }
+
 }
