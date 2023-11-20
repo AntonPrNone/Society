@@ -129,7 +129,7 @@
 
                     <Border CornerRadius="10" Grid.Row="2" Padding="10" Background="#200F53" Margin="20">
                         <ScrollViewer VerticalScrollBarVisibility="Hidden">
-                            <ItemsControl x:Name="Society_ItemControl">
+                            <ItemsControl x:Name="Student_ItemControl">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <WrapPanel Orientation="Horizontal"/>

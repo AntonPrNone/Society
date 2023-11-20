@@ -16,18 +16,22 @@ namespace Society.View
     /// </summary>
     public partial class StudentsSocietyView : Window
     {
+        public event EventHandler DataUpdated;
+
         List<Student> _students;
+        int _id_Society;
 
         private bool isSearchBoxEmpty = true;
         AddSocietyView addSocietyView;
         InfoSocietyView infoSocietyView;
-        public StudentsSocietyView(List<Student> students)
+        public StudentsSocietyView(List<Student> students, int id_Society)
         {
             InitializeComponent();
 
+            _id_Society = id_Society;
             _students = students ?? new List<Student>(); // Гарантируем, что _students не является null
 
-            Society_ItemControl.ItemsSource = _students;
+            Student_ItemControl.ItemsSource = _students;
         }
 
         private void AddSocietyView_SocietyAdded(object sender, EventArgs e)
@@ -56,7 +60,7 @@ namespace Society.View
                 .ToList();
 
             // Проверяем, что Society_ItemControl не является null перед обновлением ItemsSource
-            Society_ItemControl?.Dispatcher.Invoke(() => Society_ItemControl.ItemsSource = filteredStudents);
+            Student_ItemControl?.Dispatcher.Invoke(() => Student_ItemControl.ItemsSource = filteredStudents);
         }
 
 
@@ -139,12 +143,35 @@ namespace Society.View
 
             if (student != null)
             {
-                int studentID = student.ID_Student;
+                // Попытка удаления связи из базы данных
+                var result = DB_Interaction.DeleteStudentSocietyLink(student.ID_Student, _id_Society);
 
-                // Теперь у вас есть ID_Student, и вы можете выполнить дальнейшие действия
-                // Например, вызвать метод удаления студента из базы данных
-                // или предложить подтверждение удаления с использованием диалогового окна
+                if (result.success)
+                {
+                    // Успешное удаление из базы данных
+                    // Удаляем элемент из коллекции
+                    _students.Remove(student);
+
+                    // Обновляем источник данных для ItemsControl
+                    Student_ItemControl.ItemsSource = null;
+                    Student_ItemControl.ItemsSource = _students;
+
+                    OnDataUpdated();
+
+                }
+
+                else
+                {
+                    // Обработка ошибки (result.errorMessage содержит текст ошибки)
+                    MessageBox.Show($"Ошибка при удалении: {result.errorMessage}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
+
+        protected virtual void OnDataUpdated()
+        {
+            DataUpdated?.Invoke(this, EventArgs.Empty);
+        }
+
     }
 }

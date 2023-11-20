@@ -83,6 +83,9 @@
     <Compile Include="View\AddSocietyView.xaml.cs">
       <DependentUpon>AddSocietyView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\AddStudentInSocietyView.xaml.cs">
+      <DependentUpon>AddStudentInSocietyView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\HomeView.xaml.cs">
       <DependentUpon>HomeView.xaml</DependentUpon>
     </Compile>
@@ -150,6 +153,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\AddSocietyView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\AddStudentInSocietyView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

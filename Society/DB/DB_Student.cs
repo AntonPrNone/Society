@@ -338,4 +338,55 @@ public static partial class DB_Interaction
             cmd.ExecuteNonQuery();
         }
     }
+
+    public static (bool success, string errorMessage) DeleteStudentSocietyLink(int studentId, int societyId)
+    {
+        OpenConnection();
+
+        using (SqlTransaction transaction = _connection.BeginTransaction())
+        {
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.Connection = _connection;
+                cmd.Transaction = transaction;
+                cmd.CommandType = CommandType.Text;
+
+                try
+                {
+                    // Получаем ID_StudentSociety по ID_Student и ID_Society
+                    cmd.CommandText = "SELECT ID_StudentSociety FROM StudentSociety_table WHERE ID_Student = @StudentID AND ID_Society = @SocietyID";
+                    cmd.Parameters.AddWithValue("@StudentID", studentId);
+                    cmd.Parameters.AddWithValue("@SocietyID", societyId);
+
+                    int studentSocietyLinkId = Convert.ToInt32(cmd.ExecuteScalar());
+
+                    if (studentSocietyLinkId > 0)
+                    {
+                        // Удаляем связь по полученному ID_StudentSociety
+                        cmd.Parameters.Clear();
+                        cmd.CommandText = "DELETE FROM StudentSociety_table WHERE ID_StudentSociety = @StudentSocietyLinkID";
+                        cmd.Parameters.AddWithValue("@StudentSocietyLinkID", studentSocietyLinkId);
+
+                        cmd.ExecuteNonQuery();
+                        transaction.Commit();
+                        return (true, null);
+                    }
+
+                    else
+                    {
+                        transaction.Rollback();
+                        return (false, "Связь между учеником и кружком не найдена.");
+                    }
+                }
+
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    Console.WriteLine($"Ошибка при удалении связи между учеником и кружком: {ex.Message}");
+                    return (false, "Произошла ошибка при удалении связи между учеником и кружком");
+                }
+            }
+        }
+    }
+
 }

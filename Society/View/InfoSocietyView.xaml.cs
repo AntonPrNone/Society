@@ -1,6 +1,7 @@
 ﻿using Society.Model;
 using System;
 using System.Collections.Generic;
+using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -29,10 +30,9 @@ namespace Society.View
             Name_TextBox.Text = society.Name;
             MaxStudent_TextBox.Text = society.MaxStudent.ToString();
             NumberHour_TextBox.Text = society.NumberHour.ToString();
-            studentsSocietyView = new StudentsSocietyView(students);
 
             Lesson_ItemControl.ItemsSource = lessons;
-            СountStudent_RunTextBlock.Text = $"{students.Count}/{society.MaxStudent}";
+            СountStudent_RunTextBlock.Text = $"{students.Count}/{_society.MaxStudent}";
         }
 
         private void Save_Button_Click(object sender, RoutedEventArgs e)
@@ -45,7 +45,8 @@ namespace Society.View
                 if (newSocietyID)
                 {
                     OnSocietySaved();
-
+                    _society = DB_Interaction.GetSocietyById(_society.ID_Society);
+                    СountStudent_RunTextBlock.Text = $"{students.Count}/{_society.MaxStudent}";
                 }
 
                 else
@@ -159,7 +160,15 @@ namespace Society.View
 
         private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            studentsSocietyView = new StudentsSocietyView(students, _society.ID_Society);
+            studentsSocietyView.DataUpdated += StudentsView_DataUpdated;
             studentsSocietyView.Show();
+        }
+
+        private void StudentsView_DataUpdated(object sender, EventArgs e)
+        {
+           _society = DB_Interaction.GetSocietyById(_society.ID_Society);
+            СountStudent_RunTextBlock.Text = $"{students.Count}/{_society.MaxStudent}";
         }
     }
 }

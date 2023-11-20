@@ -103,10 +103,53 @@ public static partial class DB_Interaction
                 return rowsAffected > 0;
             }
         }
+
         catch (Exception ex)
         {
             Console.WriteLine($"Ошибка при обновлении данных о кружке: {ex.Message}");
             return false;
         }
     }
+
+    public static SocietyClass GetSocietyById(int societyId)
+    {
+        try
+        {
+            OpenConnection();
+
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.Connection = _connection;
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "SELECT * FROM Society_table WHERE ID_Society = @ID";
+
+                cmd.Parameters.AddWithValue("@ID", societyId);
+
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        SocietyClass society = new SocietyClass
+                        {
+                            ID_Society = Convert.ToInt32(reader["ID_Society"]),
+                            Name = reader["Name"].ToString(),
+                            MaxStudent = Convert.ToInt32(reader["MaxStudent"]),
+                            NumberHour = Convert.ToInt32(reader["NumberHour"])
+                        };
+
+                        return society;
+                    }
+                }
+            }
+
+            return null; // Возвращаем null, если кружок с указанным ID не найден
+        }
+
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Ошибка при получении данных о кружке: {ex.Message}");
+            return null;
+        }
+    }
+
 }
