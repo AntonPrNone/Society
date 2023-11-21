@@ -1,6 +1,7 @@
 ﻿using Society.Model;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,8 +20,10 @@ namespace Society.View
         public event EventHandler SocietySaved;
 
         private SocietyClass _society;
-        private List<Lesson> lessons;
+        private List<Lesson> lessons = new List<Lesson>();
         private List<Student> students;
+        private bool isSearchBoxEmpty = true;
+
         public InfoSocietyView(SocietyClass society)
         {
             InitializeComponent();
@@ -34,6 +37,12 @@ namespace Society.View
 
             Lesson_ItemControl.ItemsSource = lessons;
             СountStudent_RunTextBlock.Text = $"{students.Count}/{_society.MaxStudent}";
+
+            if (User.ID_Role == 1)
+            {
+                Save_Button.IsEnabled = false;
+                Add_Button.IsEnabled = false;
+            }
         }
 
         protected virtual void OnSocietySaved()
@@ -63,7 +72,8 @@ namespace Society.View
 
                 else
                 {
-                    MessageBox.Show("Ошибка при добавлении кружка.");
+                    ErrorView errorView = new ErrorView("Ошибка", "Ошибка при добавлении кружка");
+                    errorView.Show();
                 }
             }
         }
@@ -143,17 +153,35 @@ namespace Society.View
 
         private void SearchTextBox_GotFocus(object sender, RoutedEventArgs e)
         {
-
+            SearchTextBox.Text = isSearchBoxEmpty ? "" : SearchTextBox.Text;
+            isSearchBoxEmpty = false;
         }
 
         private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
+            string searchText = SearchTextBox.Text.ToLower();
 
+            if (lessons != null)
+            {
+                // Применяем фильтр к lessons
+                List<Lesson> filteredLessons = lessons.Where(lesson =>
+                    lesson.Date.ToLower().Contains(searchText) ||
+                    lesson.StartTime.ToLower().Contains(searchText) ||
+                    lesson.EndTime.ToLower().Contains(searchText) ||
+                    lesson.CabinetNumber.ToString().Contains(searchText) ||
+                    lesson.Teacher.Name.ToLower().Contains(searchText) ||
+                    lesson.Teacher.Surname.ToLower().Contains(searchText) ||
+                    lesson.Teacher.Patronymic.ToLower().Contains(searchText)
+                ).ToList();
+
+                // Обновляем отображение в ItemsControl
+                Lesson_ItemControl?.Dispatcher.Invoke(() => Lesson_ItemControl.ItemsSource = filteredLessons);
+            }
         }
 
         private void BorderItem_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (sender is FrameworkElement element && element.DataContext is Lesson lesson)
+            if (sender is FrameworkElement element && element.DataContext is Lesson lesson && User.ID_Role != 1)
             {
                 editLessonView = new EditLessonView(lesson.ID_Lesson, _society.ID_Society);
                 editLessonView.LessonUpdate += UpdateLessons;

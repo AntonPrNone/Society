@@ -1,8 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Controls;
+﻿using Society.Logic;
 using Society.Model;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
 
 namespace Society.View
 {
@@ -17,13 +21,24 @@ namespace Society.View
         {
             InitializeComponent();
             societyClasses = DB_Interaction.GetSocieties();
+
+            if (User.ID_Role == 1)
+            {
+                societyClasses = DB_Interaction.GetSocietiesByEmployeeId(User.ID_Employee);
+                Add_Button.IsEnabled = false;
+            }
+
             Society_ItemControl.ItemsSource = societyClasses;
         }
 
         private void AddSocietyView_SocietyAdded(object sender, EventArgs e)
         {
-            // Обновите данные в вашем окне после добавления кружка
             societyClasses = DB_Interaction.GetSocieties();
+            if (User.ID_Role == 1)
+            {
+                societyClasses = DB_Interaction.GetSocietiesByEmployeeId(User.ID_Employee);
+            }
+
             Society_ItemControl.ItemsSource = societyClasses;
         }
 

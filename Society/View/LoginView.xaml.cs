@@ -318,5 +318,29 @@ namespace Society.View
 
             formToFadeIn.BeginAnimation(UIElement.OpacityProperty, fadeInAnimation);
         }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                // Обработка нажатия стрелки влево
+                RollbackToPreviousForm();
+            }
+        }
+
+        private void RollbackToPreviousForm()
+        {
+            if (StatePage == 1)
+            {
+                SwitchForms(Form2_StackPanel, Form1_StackPanel);
+                StatePage = 0;
+            }
+
+            else if (StatePage == 2)
+            {
+                SwitchForms(Form3_StackPanel, Form2_StackPanel);
+                StatePage = 1;
+            }
+        }
     }
 }

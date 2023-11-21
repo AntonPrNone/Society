@@ -85,8 +85,22 @@ namespace Society.View
                 isValid = false;
             }
 
+            // Проверка, что время завершения больше времени начала
+            if (isValid)
+            {
+                DateTime startTime = DateTime.ParseExact(StartTime_TextBox.Text, "HH:mm", null);
+                DateTime endTime = DateTime.ParseExact(EndTime_TextBox.Text, "HH:mm", null);
+
+                if (endTime <= startTime)
+                {
+                    ErrorEndTime_TextBlock.Text = "Время завершения должно быть больше времени начала";
+                    isValid = false;
+                }
+            }
+
             return isValid;
         }
+
 
         private void Save_Button_Click(object sender, RoutedEventArgs e)
         {

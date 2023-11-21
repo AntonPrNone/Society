@@ -10,6 +10,7 @@ namespace Society.ViewModel
         StudentControl student = new StudentControl();
         SocietyControl society = new SocietyControl();
         AboutProgramControl aboutProgram = new AboutProgramControl();
+        HomeControl home = new HomeControl();
 
         private UserControl _currentChildView;
         public UserControl CurrentChildView
@@ -82,6 +83,22 @@ namespace Society.ViewModel
                     CurrentChildView = aboutProgram;
                 }
                 OnPropertyChanged(nameof(IsPage4Selected));
+
+            }
+        }
+
+        private bool _isPage0Selected;
+        public bool IsPage0Selected
+        {
+            get => _isPage0Selected;
+            set
+            {
+                _isPage0Selected = value;
+                if (value)
+                {
+                    CurrentChildView = home;
+                }
+                OnPropertyChanged(nameof(IsPage0Selected));
 
             }
         }

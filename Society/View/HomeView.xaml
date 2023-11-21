@@ -11,7 +11,7 @@
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
         Background="Transparent"
-        AllowsTransparency="True">
+        AllowsTransparency="True" PreviewKeyDown="Window_PreviewKeyDown">
     <!--<Grid>
         <TextBlock x:Name="TB" HorizontalAlignment="Center" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Center"/>
     </Grid>-->
@@ -59,13 +59,13 @@
                     <RadioButton Style="{StaticResource menuButton}"
                                  Tag="{StaticResource color1}"
                                  IsChecked="{Binding IsPage0Selected}"
-                                 Command="{Binding ShowHomeViewCommand}" GroupName="NavMenu" Visibility="Collapsed">
+                                 Command="{Binding ShowHomeViewCommand}" GroupName="NavMenu">
                         <StackPanel Orientation="Horizontal">
                             <fa:IconImage Icon="Home" Style="{StaticResource menuButtonIcon}"/>
-                            <TextBlock Text="Dashboard" Style="{StaticResource menuButtonText}"/>
+                            <TextBlock Text="Главная" Style="{StaticResource menuButtonText}"/>
                         </StackPanel>
                     </RadioButton>
-                    <RadioButton Style="{StaticResource menuButton}"
+                    <RadioButton x:Name="Employee_RadioButton" Style="{StaticResource menuButton}"
                                  Tag="{StaticResource color2}"
                                  IsChecked="{Binding IsPage1Selected}"
                                  Command="{Binding ShowCustomerViewCommand}" GroupName="NavMenu">
@@ -219,7 +219,7 @@
                             <Ellipse Height="35" Width="35"
                                      Stroke="{StaticResource color2}"
                                      StrokeThickness="2"
-                                     Margin="10,0,10,0">
+                                     Margin="10,0,10,0" MouseLeftButtonDown="Ellipse_MouseLeftButtonDown">
                                 <Ellipse.Fill>
                                     <ImageBrush ImageSource="/Resource/Img/teacher.png"/>
                                 </Ellipse.Fill>                                

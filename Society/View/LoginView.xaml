@@ -10,7 +10,7 @@ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         WindowStartupLocation="CenterScreen"
         Background="Transparent"
         AllowsTransparency="True"
-        MouseDown="Window_MouseDown" RenderTransformOrigin="0.5,0.5">
+        MouseDown="Window_MouseDown" RenderTransformOrigin="0.5,0.5" KeyDown="Window_KeyDown">
     <Border CornerRadius="12">
         <Border.Background>
             <ImageBrush ImageSource="/Resource/img/bg.jpg"

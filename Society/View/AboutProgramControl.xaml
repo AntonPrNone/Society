@@ -17,7 +17,7 @@
         </StackPanel>
         <Border CornerRadius="10" Grid.Row="1" Padding="10" Background="#200F53" Margin="0,50,0,0">
             <StackPanel>
-                <TextBlock Foreground="{StaticResource color6}" FontSize="16" Text="Открытый исходный код программы. Репозиторий на GitHub:"/>
+                <TextBlock Foreground="{StaticResource color6}" FontSize="16" Text="Открытый исходный код программы. Репозиторий на GitHub:" Margin="20"/>
                 <Image x:Name="imageQr" Height="200" Width="200" Margin="0,50,0,0"></Image>
             </StackPanel>
         </Border>

@@ -23,6 +23,11 @@ namespace Society.View
             InitializeComponent();
             LoadDataGrid();
             Student_DataGrid.Loaded += (sender, e) => CustomizationTables();
+
+            if (User.ID_Role == 1)
+            {
+                Save_Button.IsEnabled = false;
+            }
         }
 
         private void LoadDataGrid()
@@ -81,11 +86,9 @@ namespace Society.View
                 // Проверка валидности псевдодаты
                 if (!PsevdoDateTime.IsValidPseudoDate(pseudoDate))
                 {
-                    MessageBox.Show("Ошибка: Неверный формат даты.");
+                    ErrorView errorView = new ErrorView("Ошибка", "Неверный формат записи даты");
                     return false;
                 }
-
-                // Добавьте аналогичную проверку для других столбцов, если необходимо
             }
 
             return true;
@@ -135,8 +138,7 @@ namespace Society.View
             SearchTextBox.Text = isSearchBoxEmpty ? "" : SearchTextBox.Text;
             isSearchBoxEmpty = false;
         }
-
-        private void Reser_Button_Click(object sender, RoutedEventArgs e)
+        private void Reset_Button_Click(object sender, RoutedEventArgs e)
         {
             LoadDataGrid();
             CustomizationTables();

@@ -151,5 +151,47 @@ public static partial class DB_Interaction
             return null;
         }
     }
+    public static List<SocietyClass> GetSocietiesByEmployeeId(int employeeId)
+    {
+        List<SocietyClass> societies = new List<SocietyClass>();
 
+        try
+        {
+            OpenConnection();
+
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.Connection = _connection;
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "SELECT Society_table.* FROM Society_table " +
+                                  "JOIN SocietyEmployee_table ON Society_table.ID_Society = SocietyEmployee_table.ID_Society " +
+                                  "WHERE SocietyEmployee_table.ID_Employee = @EmployeeID";
+
+                cmd.Parameters.AddWithValue("@EmployeeID", employeeId);
+
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        SocietyClass society = new SocietyClass
+                        {
+                            ID_Society = Convert.ToInt32(reader["ID_Society"]),
+                            Name = reader["Name"].ToString(),
+                            MaxStudent = Convert.ToInt32(reader["MaxStudent"]),
+                            NumberHour = Convert.ToInt32(reader["NumberHour"])
+                        };
+
+                        societies.Add(society);
+                    }
+                }
+            }
+
+            return societies;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Ошибка при получении данных о кружках для сотрудника: {ex.Message}");
+            return null;
+        }
+    }
 }

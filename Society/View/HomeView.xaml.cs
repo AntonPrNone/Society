@@ -28,8 +28,10 @@ namespace Society.View
             InitializeComponent();
             DataContext = new MainViewModel();
 
-
-            //TB.Text = $"{User.Name} {User.Surname} {User.Patronymic} {User.ID_Employee} {User.Login} {User.Password} {User.ID_Role}";
+            if (User.ID_Role == 1)
+            {
+                Employee_RadioButton.Visibility = Visibility.Collapsed;
+            }
         }
 
         [DllImport("user32.dll")]
@@ -56,6 +58,25 @@ namespace Society.View
             if (this.WindowState == WindowState.Normal)
                 this.WindowState = WindowState.Maximized;
             else this.WindowState = WindowState.Normal;
+        }
+
+        private void Ellipse_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            User.ClearEmployeeID();
+            LoginView loginView = new LoginView();
+            loginView.Show();
+            Close();
+        }
+
+        private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                User.ClearEmployeeID();
+                LoginView loginView = new LoginView();
+                loginView.Show();
+                Close();
+            }
         }
     }
 }
