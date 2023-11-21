@@ -1,7 +1,6 @@
 ﻿using Society.Model;
 using System;
 using System.Collections.Generic;
-using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -16,7 +15,9 @@ namespace Society.View
     public partial class InfoSocietyView : Window
     {
         StudentsSocietyView studentsSocietyView;
+        EditLessonView editLessonView;
         public event EventHandler SocietySaved;
+
         private SocietyClass _society;
         private List<Lesson> lessons;
         private List<Student> students;
@@ -35,11 +36,22 @@ namespace Society.View
             СountStudent_RunTextBlock.Text = $"{students.Count}/{_society.MaxStudent}";
         }
 
+        protected virtual void OnSocietySaved()
+        {
+            // Проверяем, есть ли подписчики на событие, и если есть, вызываем событие
+            SocietySaved?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void UpdateLessons(object sender, EventArgs e)
+        {
+            lessons = DB_Interaction.GetLessonsBySociety(_society.ID_Society);
+            Lesson_ItemControl.ItemsSource = lessons;
+        }
+
         private void Save_Button_Click(object sender, RoutedEventArgs e)
         {
             if (ValidateInput(out string name, out int maxStudent, out int numberHour))
             {
-                // Вызываем метод добавления
                 bool newSocietyID = DB_Interaction.UpdateSociety(_society.ID_Society, name, maxStudent, numberHour);
 
                 if (newSocietyID)
@@ -54,12 +66,6 @@ namespace Society.View
                     MessageBox.Show("Ошибка при добавлении кружка.");
                 }
             }
-        }
-
-        protected virtual void OnSocietySaved()
-        {
-            // Проверяем, есть ли подписчики на событие, и если есть, вызываем событие
-            SocietySaved?.Invoke(this, EventArgs.Empty);
         }
 
         private bool ValidateInput(out string name, out int maxStudent, out int numberHour)
@@ -113,9 +119,26 @@ namespace Society.View
             return isValid;
         }
 
+
+        private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            studentsSocietyView = new StudentsSocietyView(_society.ID_Society);
+            studentsSocietyView.StudentsInSocietyUpdated += StudentsView_DataUpdated;
+            studentsSocietyView.Show();
+        }
+
+        private void StudentsView_DataUpdated(object sender, EventArgs e)
+        {
+            _society = DB_Interaction.GetSocietyById(_society.ID_Society);
+            students = DB_Interaction.GetStudentsBySociety(_society.ID_Society);
+            СountStudent_RunTextBlock.Text = $"{students.Count}/{_society.MaxStudent}";
+        }
+
         private void Add_Button_Click(object sender, RoutedEventArgs e)
         {
-
+            editLessonView = new EditLessonView(-1, _society.ID_Society);
+            editLessonView.LessonUpdate += UpdateLessons;
+            editLessonView.Show();
         }
 
         private void SearchTextBox_GotFocus(object sender, RoutedEventArgs e)
@@ -128,6 +151,18 @@ namespace Society.View
 
         }
 
+        private void BorderItem_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is FrameworkElement element && element.DataContext is Lesson lesson)
+            {
+                editLessonView = new EditLessonView(lesson.ID_Lesson, _society.ID_Society);
+                editLessonView.LessonUpdate += UpdateLessons;
+                editLessonView.Show();
+            }
+        }
+
+        //----------------------------------------------------------------------------------------------
+
         [DllImport("user32.dll")]
         public static extern IntPtr SendMessage(IntPtr hWnd, int wMsg, int wParam, int lParam);
         private void pnlControlBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -138,7 +173,7 @@ namespace Society.View
 
         private void pnlControlBar_MouseEnter(object sender, MouseEventArgs e)
         {
-            
+
             this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
         }
         private void btnClose_Click(object sender, RoutedEventArgs e)
@@ -156,19 +191,6 @@ namespace Society.View
             if (this.WindowState == WindowState.Normal)
                 this.WindowState = WindowState.Maximized;
             else this.WindowState = WindowState.Normal;
-        }
-
-        private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            studentsSocietyView = new StudentsSocietyView(students, _society.ID_Society);
-            studentsSocietyView.DataUpdated += StudentsView_DataUpdated;
-            studentsSocietyView.Show();
-        }
-
-        private void StudentsView_DataUpdated(object sender, EventArgs e)
-        {
-           _society = DB_Interaction.GetSocietyById(_society.ID_Society);
-            СountStudent_RunTextBlock.Text = $"{students.Count}/{_society.MaxStudent}";
         }
     }
 }

@@ -167,7 +167,7 @@
                         <StackPanel>
                              <TextBlock>
                                 <Run Text="Кол-во учеников: " FontSize="16" Foreground="#FFBCBEE0" />
-                                <Run x:Name="СountStudent_RunTextBlock" Text="" FontSize="16" Foreground="#FFBCBEE0" FontWeight="Bold"/>
+                                <Run x:Name="СountStudent_RunTextBlock" Text="" FontSize="16" Foreground="{StaticResource color3}" FontWeight="Bold"/>
                             </TextBlock>
                         </StackPanel>
                     </Border>
@@ -287,7 +287,7 @@
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <Border BorderBrush="{StaticResource color5}" BorderThickness="1"  Margin="10" Padding="10" VerticalAlignment="Top" CornerRadius="15" Cursor="Hand" MouseLeftButtonDown="Border_MouseLeftButtonDown">
+                                        <Border BorderBrush="{StaticResource color5}" BorderThickness="1"  Margin="10" Padding="10" VerticalAlignment="Top" CornerRadius="15" Cursor="Hand" MouseLeftButtonDown="BorderItem_MouseLeftButtonDown">
                                             <Border.Style>
                                                 <Style TargetType="Border">
                                                     <Setter Property="Background" Value="Transparent"/>
@@ -303,18 +303,24 @@
                                                 </Style>
                                             </Border.Style>
                                             <StackPanel>
-                                                <TextBlock Text="{Binding Date}" FontSize="18" Foreground="{StaticResource color5}" HorizontalAlignment="Center" Margin="0, 0, 0, 5"/>
+                                                <TextBlock Text="{Binding Date}" FontSize="18" Foreground="{StaticResource color5}" FontWeight="Bold" HorizontalAlignment="Center" Margin="0, 0, 0, 5" TextDecorations="Underline"/>
                                                 <TextBlock>
                                                     <Run Text="Кабинет: " FontSize="16" Foreground="#FFBCBEE0" />
-                                                    <Run Text="{Binding CabinetNumber}" FontSize="16" Foreground="#FFBCBEE0" FontWeight="Bold"/>
+                                                    <Run Text="{Binding CabinetNumber}" FontSize="16" Foreground="{StaticResource color5}" FontWeight="Bold"/>
                                                 </TextBlock>
                                                 <TextBlock>
                                                     <Run Text="Время начала: " FontSize="16" Foreground="#FFBCBEE0" />
-                                                    <Run Text="{Binding StartTime}" FontSize="16" Foreground="#FFBCBEE0" FontWeight="Bold" />
+                                                    <Run Text="{Binding StartTime}" FontSize="16" Foreground="{StaticResource color5}" FontWeight="Bold" />
                                                 </TextBlock>
                                                 <TextBlock>
-                                                    <Run Text="Время конца: " FontSize="16" Foreground="#FFBCBEE0" />
-                                                    <Run Text="{Binding EndTime}" FontSize="16" Foreground="#FFBCBEE0" FontWeight="Bold" />
+                                                    <Run Text="Время завершения: " FontSize="16" Foreground="#FFBCBEE0" />
+                                                    <Run Text="{Binding EndTime}" FontSize="16" Foreground="{StaticResource color5}" FontWeight="Bold" />
+                                                </TextBlock>
+                                                <TextBlock Text="Преподаватель:" FontSize="16" Foreground="#FFBCBEE0" Margin="0, 5, 0, 0"/>
+                                                <TextBlock>
+                                                    <Run Text="{Binding Teacher.Name}" FontSize="16" Foreground="{StaticResource color5}" FontWeight="Bold" />
+                                                    <Run Text="{Binding Teacher.Surname}" FontSize="16" Foreground="{StaticResource color5}"  FontWeight="Bold" />
+                                                    <Run Text="{Binding Teacher.Patronymic}" FontSize="16" Foreground="{StaticResource color5}"  FontWeight="Bold" />
                                                 </TextBlock>
                                             </StackPanel>
                                         </Border>

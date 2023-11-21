@@ -137,7 +137,7 @@
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <Border BorderBrush="{StaticResource color3}" BorderThickness="1"  Margin="10" Padding="10" VerticalAlignment="Top" CornerRadius="15" Cursor="Hand" MouseLeftButtonDown="Border_MouseLeftButtonDown">
+                                        <Border BorderBrush="{StaticResource color3}" BorderThickness="1"  Margin="10" Padding="10" VerticalAlignment="Top" CornerRadius="15" Cursor="Hand">
                                             <Border.Style>
                                                 <Style TargetType="Border">
                                                     <Setter Property="Background" Value="Transparent"/>

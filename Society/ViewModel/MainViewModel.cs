@@ -1,10 +1,5 @@
 ﻿using Society.View;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 
 namespace Society.ViewModel
@@ -14,6 +9,7 @@ namespace Society.ViewModel
         TeacherControl teacher = new TeacherControl();
         StudentControl student = new StudentControl();
         SocietyControl society = new SocietyControl();
+        AboutProgramControl aboutProgram = new AboutProgramControl();
 
         private UserControl _currentChildView;
         public UserControl CurrentChildView
@@ -51,7 +47,6 @@ namespace Society.ViewModel
                 _isPage2Selected = value;
                 if (value)
                 {
-                    // При выборе страницы 2 устанавливаем соответствующий UserControl
                     CurrentChildView = student;
                 }
                 OnPropertyChanged(nameof(IsPage2Selected));
@@ -68,10 +63,25 @@ namespace Society.ViewModel
                 _isPage3Selected = value;
                 if (value)
                 {
-                    // При выборе страницы 2 устанавливаем соответствующий UserControl
                     CurrentChildView = society;
                 }
                 OnPropertyChanged(nameof(IsPage3Selected));
+
+            }
+        }
+
+        private bool _isPage4Selected;
+        public bool IsPage4Selected
+        {
+            get => _isPage4Selected;
+            set
+            {
+                _isPage4Selected = value;
+                if (value)
+                {
+                    CurrentChildView = aboutProgram;
+                }
+                OnPropertyChanged(nameof(IsPage4Selected));
 
             }
         }

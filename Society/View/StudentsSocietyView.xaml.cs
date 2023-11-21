@@ -16,36 +16,46 @@ namespace Society.View
     /// </summary>
     public partial class StudentsSocietyView : Window
     {
-        public event EventHandler DataUpdated;
+        AddStudentInSocietyView addStudentInSociety;
+        public event EventHandler StudentsInSocietyUpdated;
 
-        List<Student> _students;
-        int _id_Society;
-
+        List<Student> students;
+        SocietyClass _society;
         private bool isSearchBoxEmpty = true;
-        AddSocietyView addSocietyView;
-        InfoSocietyView infoSocietyView;
-        public StudentsSocietyView(List<Student> students, int id_Society)
+
+
+        public StudentsSocietyView(int societyId)
         {
             InitializeComponent();
 
-            _id_Society = id_Society;
-            _students = students ?? new List<Student>(); // Гарантируем, что _students не является null
+            _society = DB_Interaction.GetSocietyById(societyId);
+            students = DB_Interaction.GetStudentsBySociety(societyId);
 
-            Student_ItemControl.ItemsSource = _students;
+            Student_ItemControl.ItemsSource = students;
         }
 
-        private void AddSocietyView_SocietyAdded(object sender, EventArgs e)
+        private void AddSocietyView_StudentSocietyLinkAdded(object sender, EventArgs e)
         {
-            //// Обновите данные в вашем окне после добавления кружка
-            //societyClasses = DB_Interaction.GetSocieties();
-            //Society_ItemControl.ItemsSource = societyClasses;
+            // Обновляем данные после успешного добавления связи
+            UpdateStudentsData();
+        }
+
+        private void UpdateStudentsData()
+        {
+            _society = DB_Interaction.GetSocietyById(_society.ID_Society);
+            students = DB_Interaction.GetStudentsBySociety(_society.ID_Society);
+
+            Student_ItemControl.ItemsSource = null;
+            Student_ItemControl.ItemsSource = students;
+
+            OnStudentsInSocietyUpdated();
         }
 
         private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             string searchText = SearchTextBox.Text.ToLower();
 
-            var filteredStudents = _students?
+            var filteredStudents = students?
                 .Where(student =>
                     student != null &&
                     (
@@ -53,8 +63,7 @@ namespace Society.View
                         student.Name.ToLower().Contains(searchText) ||
                         student.Surname.ToLower().Contains(searchText) ||
                         student.Patronymic.ToLower().Contains(searchText) ||
-                        student.DateOfBirth.ToString("dd.MM.yyyy").Contains(searchText) // Пример для поиска по дате рождения в формате "dd.MM.yyyy"
-                                                                                        // Добавьте другие поля, если необходимо
+                        student.DateOfBirth.ToString().Contains(searchText)
                     )
                 )
                 .ToList();
@@ -63,35 +72,53 @@ namespace Society.View
             Student_ItemControl?.Dispatcher.Invoke(() => Student_ItemControl.ItemsSource = filteredStudents);
         }
 
-
-
         private void SearchTextBox_GotFocus(object sender, System.Windows.RoutedEventArgs e)
         {
             SearchTextBox.Text = isSearchBoxEmpty ? "" : SearchTextBox.Text;
             isSearchBoxEmpty = false;
         }
 
-        private void Border_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            // Получаем выбранный объект SocietyClass из DataContext Border'а
-            SocietyClass selectedSociety = (SocietyClass)((Border)sender).DataContext;
-
-            // Создаем новое окно
-            infoSocietyView = new InfoSocietyView(selectedSociety);
-            infoSocietyView.SocietySaved += AddSocietyView_SocietyAdded;
-
-            // Открываем новое окно
-            infoSocietyView.Show();
-        }
-
         private void Add_Button_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            addSocietyView = new AddSocietyView();
-            addSocietyView.SocietyAdded += AddSocietyView_SocietyAdded;
+            addStudentInSociety = new AddStudentInSocietyView(_society.ID_Society);
+            addStudentInSociety.StudentSocietyLinkAdded += AddSocietyView_StudentSocietyLinkAdded;
 
-            addSocietyView.Show();
+            addStudentInSociety.Show();
         }
 
+        private void Delete_Button_Click(object sender, RoutedEventArgs e)
+        {
+            Button deleteButton = (Button)sender;
+            Student student = (Student)deleteButton.DataContext;
+
+            if (student != null)
+            {
+                var result = DB_Interaction.DeleteStudentSocietyLink(student.ID_Student, _society.ID_Society);
+
+                if (result.success)
+                {
+                    students.Remove(student);
+
+                    Student_ItemControl.ItemsSource = null;
+                    Student_ItemControl.ItemsSource = students;
+
+                    OnStudentsInSocietyUpdated();
+
+                }
+
+                else
+                {
+                    MessageBox.Show($"Ошибка при удалении: {result.errorMessage}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+        protected virtual void OnStudentsInSocietyUpdated()
+        {
+            StudentsInSocietyUpdated?.Invoke(this, EventArgs.Empty);
+        }
+
+        //--------------------------------------------------------------------------------------------
 
         [DllImport("user32.dll")]
         public static extern IntPtr SendMessage(IntPtr hWnd, int wMsg, int wParam, int lParam);
@@ -122,46 +149,5 @@ namespace Society.View
                 this.WindowState = WindowState.Maximized;
             else this.WindowState = WindowState.Normal;
         }
-
-        private void Delete_Button_Click(object sender, RoutedEventArgs e)
-        {
-            // Получаем кнопку, на которую было произведено нажатие
-            Button deleteButton = (Button)sender;
-
-            // Получаем контекст данных (элемент, к которому привязана кнопка)
-            Student student = (Student)deleteButton.DataContext;
-
-            if (student != null)
-            {
-                // Попытка удаления связи из базы данных
-                var result = DB_Interaction.DeleteStudentSocietyLink(student.ID_Student, _id_Society);
-
-                if (result.success)
-                {
-                    // Успешное удаление из базы данных
-                    // Удаляем элемент из коллекции
-                    _students.Remove(student);
-
-                    // Обновляем источник данных для ItemsControl
-                    Student_ItemControl.ItemsSource = null;
-                    Student_ItemControl.ItemsSource = _students;
-
-                    OnDataUpdated();
-
-                }
-
-                else
-                {
-                    // Обработка ошибки (result.errorMessage содержит текст ошибки)
-                    MessageBox.Show($"Ошибка при удалении: {result.errorMessage}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            }
-        }
-
-        protected virtual void OnDataUpdated()
-        {
-            DataUpdated?.Invoke(this, EventArgs.Empty);
-        }
-
     }
 }

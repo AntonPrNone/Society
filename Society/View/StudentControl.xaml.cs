@@ -1,4 +1,5 @@
-﻿using Society.Model;
+﻿using Society.Logic;
+using Society.Model;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -35,7 +36,7 @@ namespace Society.View
                 new DataColumn("Имя", typeof(string)),
                 new DataColumn("Фамилия", typeof(string)),
                 new DataColumn("Отчество", typeof(string)),
-                new DataColumn("Дата рождения", typeof(DateTime)) // Добавлено поле DateOfBirth
+                new DataColumn("Дата рождения", typeof(string)) // Добавлено поле DateOfBirth
             });
 
             foreach (Student student in students)
@@ -65,8 +66,31 @@ namespace Society.View
 
         private void Save_Button_Click(object sender, RoutedEventArgs e)
         {
-            DB_Interaction.UpdateStudents(dataTable);
+            if (ValidateData())
+            {
+                DB_Interaction.UpdateStudents(dataTable);
+            }
         }
+
+        private bool ValidateData()
+        {
+            foreach (DataRow row in dataTable.Rows)
+            {
+                string pseudoDate = row["Дата рождения"].ToString();
+
+                // Проверка валидности псевдодаты
+                if (!PsevdoDateTime.IsValidPseudoDate(pseudoDate))
+                {
+                    MessageBox.Show("Ошибка: Неверный формат даты.");
+                    return false;
+                }
+
+                // Добавьте аналогичную проверку для других столбцов, если необходимо
+            }
+
+            return true;
+        }
+
 
         private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {

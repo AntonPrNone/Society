@@ -141,7 +141,7 @@ public static partial class DB_Interaction
         }
     }
 
-    private static bool EmployeeExists(int id)
+    public static bool EmployeeExists(int id)
     {
         using (SqlCommand cmd = new SqlCommand())
         {
@@ -205,4 +205,47 @@ public static partial class DB_Interaction
             cmd.ExecuteNonQuery();
         }
     }
+
+    public static Employee GetEmployeeById(int employeeId)
+    {
+        OpenConnection();
+
+        using (SqlCommand cmd = new SqlCommand())
+        {
+            cmd.Connection = _connection;
+            cmd.CommandType = CommandType.Text;
+
+            cmd.CommandText = "SELECT * FROM Employee_table WHERE ID_Employee = @EmployeeID";
+            cmd.Parameters.AddWithValue("@EmployeeID", employeeId);
+
+            try
+            {
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        Employee employee = new Employee
+                        {
+                            ID_Employee = Convert.ToInt32(reader["ID_Employee"]),
+                            Name = reader["Name"].ToString(),
+                            Surname = reader["Surname"].ToString(),
+                            Patronymic = reader["Patronymic"].ToString(),
+                            Login = reader["Login"].ToString(),
+                            Password = reader["Password"].ToString(),
+                            ID_Role = Convert.ToInt32(reader["ID_Role"])
+                        };
+
+                        return employee;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка при получении данных сотрудника: {ex.Message}");
+            }
+
+            return null;
+        }
+    }
+
 }

@@ -38,8 +38,12 @@
     <Reference Include="FontAwesome.Sharp, Version=6.3.0.0, Culture=neutral, PublicKeyToken=d16d1e4e568ec10f, processorArchitecture=MSIL">
       <HintPath>..\packages\FontAwesome.Sharp.6.3.0\lib\net48\FontAwesome.Sharp.dll</HintPath>
     </Reference>
+    <Reference Include="QRCoder, Version=1.4.3.0, Culture=neutral, PublicKeyToken=c4ed5b9ae8358a28, processorArchitecture=MSIL">
+      <HintPath>..\packages\QRCoder.1.4.3\lib\net40\QRCoder.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -68,6 +72,7 @@
     <Compile Include="DB\DB_Lesson.cs" />
     <Compile Include="DB\DB_Society.cs" />
     <Compile Include="DB\DB_Student.cs" />
+    <Compile Include="Logic\PsevdoDateTime.cs" />
     <Compile Include="Model\Employee.cs" />
     <Compile Include="Model\Lesson.cs" />
     <Compile Include="Model\Role.cs" />
@@ -80,11 +85,17 @@
     <Compile Include="Model\User.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="View\AboutProgramControl.xaml.cs">
+      <DependentUpon>AboutProgramControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\AddSocietyView.xaml.cs">
       <DependentUpon>AddSocietyView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\AddStudentInSocietyView.xaml.cs">
       <DependentUpon>AddStudentInSocietyView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\EditLessonView.xaml.cs">
+      <DependentUpon>EditLessonView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\HomeView.xaml.cs">
       <DependentUpon>HomeView.xaml</DependentUpon>
@@ -148,7 +159,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Resource\Styles\TextBoxStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resource\Styles\UIColors.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\AboutProgramControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -157,6 +176,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\AddStudentInSocietyView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\EditLessonView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

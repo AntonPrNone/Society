@@ -59,7 +59,7 @@
                     <RadioButton Style="{StaticResource menuButton}"
                                  Tag="{StaticResource color1}"
                                  IsChecked="{Binding IsPage0Selected}"
-                                 Command="{Binding ShowHomeViewCommand}" GroupName="NavMenu">
+                                 Command="{Binding ShowHomeViewCommand}" GroupName="NavMenu" Visibility="Collapsed">
                         <StackPanel Orientation="Horizontal">
                             <fa:IconImage Icon="Home" Style="{StaticResource menuButtonIcon}"/>
                             <TextBlock Text="Dashboard" Style="{StaticResource menuButtonText}"/>
@@ -94,7 +94,7 @@
                     </RadioButton>
                     <RadioButton Style="{StaticResource menuButton}"
                                  Tag="{StaticResource color5}"
-                                 Command="{Binding ShowCustomerViewCommand}" GroupName="NavMenu">
+                                 Command="{Binding ShowCustomerViewCommand}" GroupName="NavMenu" Visibility="Collapsed">
                         <StackPanel Orientation="Horizontal">
                             <fa:IconImage Icon="Box" Style="{StaticResource menuButtonIcon}"/>
                             <TextBlock Text="Stock" Style="{StaticResource menuButtonText}"/>
@@ -102,15 +102,16 @@
                     </RadioButton>
                     <RadioButton Style="{StaticResource menuButton}"
                                  Tag="{StaticResource color6}"
+                                 IsChecked="{Binding IsPage4Selected}"
                                  Command="{Binding ShowCustomerViewCommand}" GroupName="NavMenu">
                         <StackPanel Orientation="Horizontal">
-                            <fa:IconImage Icon="Wallet" Style="{StaticResource menuButtonIcon}"/>
-                            <TextBlock Text="Financial" Style="{StaticResource menuButtonText}"/>
+                            <fa:IconImage Icon="Qrcode" Style="{StaticResource menuButtonIcon}"/>
+                            <TextBlock Text="О программе" Style="{StaticResource menuButtonText}"/>
                         </StackPanel>
                     </RadioButton>
                     <RadioButton Style="{StaticResource menuButton}"
                                  Tag="{StaticResource color7}"
-                                 Command="{Binding ShowCustomerViewCommand}" GroupName="NavMenu">
+                                 Command="{Binding ShowCustomerViewCommand}" GroupName="NavMenu" Visibility="Collapsed">
                         <StackPanel Orientation="Horizontal">
                             <fa:IconImage Icon="PieChart" Style="{StaticResource menuButtonIcon}"/>
                             <TextBlock Text="Report" Style="{StaticResource menuButtonText}"/>
@@ -118,7 +119,7 @@
                     </RadioButton>
                     <RadioButton Style="{StaticResource menuButton}"
                                  Tag="{StaticResource color8}"
-                                 Command="{Binding ShowCustomerViewCommand}" GroupName="NavMenu">
+                                 Command="{Binding ShowCustomerViewCommand}" GroupName="NavMenu" Visibility="Collapsed">
                         <StackPanel Orientation="Horizontal">
                             <fa:IconImage Icon="Tools" Style="{StaticResource menuButtonIcon}"/>
                             <TextBlock Text="Settings" Style="{StaticResource menuButtonText}"/>

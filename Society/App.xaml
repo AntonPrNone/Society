@@ -9,6 +9,7 @@
                 <ResourceDictionary Source="Resource/Styles/UIColors.xaml"/>
                 <ResourceDictionary Source="Resource/Styles/ButtonStyles.xaml"/>
                 <ResourceDictionary Source="Resource/Styles/DataGridStyles.xaml"/>
+                <ResourceDictionary Source="Resource/Styles/TextBoxStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

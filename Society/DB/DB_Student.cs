@@ -34,7 +34,7 @@ public static partial class DB_Interaction
                             Name = reader["Name"].ToString(),
                             Surname = reader["Surname"].ToString(),
                             Patronymic = reader["Patronymic"].ToString(),
-                            DateOfBirth = Convert.ToDateTime(reader["DateOfBirth"])
+                            DateOfBirth = reader["DateOfBirth"].ToString()
                         };
 
                         students.Add(student);
@@ -123,7 +123,7 @@ public static partial class DB_Interaction
                             Name = reader["Name"].ToString(),
                             Surname = reader["Surname"].ToString(),
                             Patronymic = reader["Patronymic"].ToString(),
-                            DateOfBirth = Convert.ToDateTime(reader["DateOfBirth"])
+                            DateOfBirth = reader["DateOfBirth"].ToString()
                         };
                     }
 
@@ -142,7 +142,7 @@ public static partial class DB_Interaction
         }
     }
 
-    public static (bool success, string errorMessage) AddStudent(string name, string surname, string patronymic, DateTime dateOfBirth)
+    public static (bool success, string errorMessage) AddStudent(string name, string surname, string patronymic, string dateOfBirth)
     {
         OpenConnection();
 
@@ -192,7 +192,7 @@ public static partial class DB_Interaction
                 string name = (string)row["Имя"];
                 string surname = (string)row["Фамилия"];
                 string patronymic = (string)row["Отчество"];
-                DateTime dateOfBirth = (DateTime)row["Дата рождения"]; // Добавлено поле DateOfBirth
+                string dateOfBirth = (string)row["Дата рождения"]; // Добавлено поле DateOfBirth
 
                 if (StudentExists(id))
                 {
@@ -207,7 +207,7 @@ public static partial class DB_Interaction
                 string name = (string)row["Имя"];
                 string surname = (string)row["Фамилия"];
                 string patronymic = (string)row["Отчество"];
-                DateTime dateOfBirth = (DateTime)row["Дата рождения"]; // Добавлено поле DateOfBirth
+                string dateOfBirth = (string)row["Дата рождения"]; // Добавлено поле DateOfBirth
 
                 if (!StudentExists(id))
                 {
@@ -225,7 +225,7 @@ public static partial class DB_Interaction
         }
     }
 
-    private static void UpdateStudent(int id, string name, string surname, string patronymic, DateTime dateOfBirth)
+    private static void UpdateStudent(int id, string name, string surname, string patronymic, string dateOfBirth)
     {
         OpenConnection();
 
@@ -281,12 +281,14 @@ public static partial class DB_Interaction
             cmd.Connection = _connection;
             cmd.CommandType = CommandType.Text;
 
-            cmd.CommandText = "SELECT COUNT(*) FROM Student_table WHERE ID_Student = @ID";
+            cmd.CommandText = "IF EXISTS (SELECT 1 FROM Student_table WHERE ID_Student = @ID) SELECT 1 ELSE SELECT 0";
             cmd.Parameters.AddWithValue("@ID", id);
 
+            // Выполним команду
             return (int)cmd.ExecuteScalar() > 0;
         }
     }
+
 
     private static void DeleteNonExistingStudents(DataTable dataTable)
     {
@@ -395,34 +397,51 @@ public static partial class DB_Interaction
 
         using (SqlTransaction transaction = _connection.BeginTransaction())
         {
-            using (SqlCommand cmd = new SqlCommand())
+            using (SqlCommand cmd = _connection.CreateCommand())
             {
-                cmd.Connection = _connection;
                 cmd.Transaction = transaction;
                 cmd.CommandType = CommandType.Text;
 
                 try
                 {
                     // Проверяем, существует ли ученик с указанным ID
-                    if (!StudentExists(studentId))
+                    if (!StudentExists(cmd, studentId))
                     {
                         transaction.Rollback();
                         return (false, "Ученик с указанным ID не найден.");
                     }
 
                     // Проверяем, существует ли кружок с указанным ID
-                    if (!SocietyExists(societyId))
+                    if (!SocietyExists(cmd, societyId))
                     {
                         transaction.Rollback();
                         return (false, "Кружок с указанным ID не найден.");
                     }
 
+                    // Проверяем, не существует ли уже связи между учеником и кружком
+                    if (StudentSocietyLinkExists(cmd, studentId, societyId))
+                    {
+                        transaction.Rollback();
+                        return (false, "Ученик уже состоит в этом кружке.");
+                    }
+
                     // Добавляем связь между учеником и кружком
                     cmd.CommandText = "INSERT INTO StudentSociety_table (ID_Student, ID_Society) VALUES (@StudentID, @SocietyID)";
-                    cmd.Parameters.AddWithValue("@StudentID", studentId);
-                    cmd.Parameters.AddWithValue("@SocietyID", societyId);
+
+                    // Используем уникальные имена параметров
+                    cmd.Parameters.Add("@StudentIDParam", SqlDbType.Int).Value = studentId;
+                    cmd.Parameters.Add("@SocietyIDParam", SqlDbType.Int).Value = societyId;
 
                     cmd.ExecuteNonQuery();
+
+                    // Получаем ID_StudentSociety
+                    cmd.Parameters.Clear();
+                    cmd.CommandText = "SELECT ID_StudentSociety FROM StudentSociety_table WHERE ID_Student = @StudentIDParam AND ID_Society = @SocietyIDParam";
+                    cmd.Parameters.Add("@StudentIDParam", SqlDbType.Int).Value = studentId;
+                    cmd.Parameters.Add("@SocietyIDParam", SqlDbType.Int).Value = societyId;
+
+                    int studentSocietyLinkId = Convert.ToInt32(cmd.ExecuteScalar());
+
                     transaction.Commit();
                     return (true, null);
                 }
@@ -437,18 +456,35 @@ public static partial class DB_Interaction
         }
     }
 
-    private static bool SocietyExists(int societyId)
+
+    private static bool StudentSocietyLinkExists(SqlCommand cmd, int studentId, int societyId)
     {
-        using (SqlCommand cmd = new SqlCommand())
-        {
-            cmd.Connection = _connection;
-            cmd.CommandType = CommandType.Text;
+        cmd.Parameters.Clear();
+        cmd.CommandText = "SELECT COUNT(*) FROM StudentSociety_table WHERE ID_Student = @StudentID AND ID_Society = @SocietyID";
+        cmd.Parameters.AddWithValue("@StudentID", studentId);
+        cmd.Parameters.AddWithValue("@SocietyID", societyId);
 
-            cmd.CommandText = "SELECT COUNT(*) FROM Society_table WHERE ID_Society = @ID";
-            cmd.Parameters.AddWithValue("@ID", societyId);
+        return (int)cmd.ExecuteScalar() > 0;
+    }
 
-            return (int)cmd.ExecuteScalar() > 0;
-        }
+    private static bool SocietyExists(SqlCommand cmd, int societyId)
+    {
+        cmd.CommandText = "IF EXISTS (SELECT 1 FROM Society_table WHERE ID_Society = @ID) SELECT 1 ELSE SELECT 0";
+        cmd.Parameters.Clear();
+        cmd.Parameters.AddWithValue("@ID", societyId);
+
+        // Выполним команду
+        return (int)cmd.ExecuteScalar() > 0;
+    }
+
+    private static bool StudentExists(SqlCommand cmd, int id)
+    {
+        cmd.CommandText = "IF EXISTS (SELECT 1 FROM Student_table WHERE ID_Student = @ID) SELECT 1 ELSE SELECT 0";
+        cmd.Parameters.Clear();
+        cmd.Parameters.AddWithValue("@ID", id);
+
+        // Выполним команду
+        return (int)cmd.ExecuteScalar() > 0;
     }
 
 }
