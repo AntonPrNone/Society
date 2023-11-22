@@ -6,7 +6,7 @@ public static partial class DB_Interaction
 {
     private static SqlConnection _connection;
     private const string _connectionString = "Data Source=DESKTOP-KA59S37;Initial Catalog=Society;Integrated Security=True";
-    private const string _connectionStringKtits = "Data Source=1304-002-23;Initial Catalog=Society;Integrated Security=True";
+    private const string _connectionStringKtits = "Data Source=K1210-15;Initial Catalog=Society;Integrated Security=True";
 
     public static void OpenConnection()
     {
