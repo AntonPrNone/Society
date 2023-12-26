@@ -88,14 +88,22 @@ namespace Society.View
 
         private void Delete_Button_Click(object sender, RoutedEventArgs e)
         {
+
             Button deleteButton = (Button)sender;
             Student student = (Student)deleteButton.DataContext;
+            // Создаем окно подтверждения
+            ErrorView confirmationView = new ErrorView("Удаление", $"Подтвердите удаление занятия");
 
-            if (student != null)
+            // Открываем окно и ждем подтверждения
+            bool? result = confirmationView.ShowDialog();
+
+            // Проверяем результат подтверждения
+            if (result.HasValue && confirmationView.IsConfirmed && student != null)
             {
-                var result = DB_Interaction.DeleteStudentSocietyLink(student.ID_Student, _society.ID_Society);
+                // Если пользователь нажал "ОК" в окне подтверждения
+                var resultDB = DB_Interaction.DeleteStudentSocietyLink(student.ID_Student, _society.ID_Society);
 
-                if (result.success)
+                if (resultDB.success)
                 {
                     students.Remove(student);
 
@@ -103,12 +111,13 @@ namespace Society.View
                     Student_ItemControl.ItemsSource = students;
 
                     OnStudentsInSocietyUpdated();
-
                 }
 
                 else
                 {
-                    MessageBox.Show($"Ошибка при удалении: {result.errorMessage}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    // Если произошла ошибка при удалении, выводим сообщение об ошибке
+                    ErrorView errorView = new ErrorView("Ошибка", "Ошибка при удалении ученика из связи");
+                    errorView.Show();
                 }
             }
         }

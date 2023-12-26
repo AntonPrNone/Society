@@ -12,7 +12,7 @@ public static partial class DB_Interaction
     {
         if (_connection == null)
         {
-            _connection = new SqlConnection(_connectionStringKtits);
+            _connection = new SqlConnection(_connectionString);
         }
 
         if (_connection.State == ConnectionState.Closed)

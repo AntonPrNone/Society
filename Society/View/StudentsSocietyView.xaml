@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Society.View" xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
         mc:Ignorable="d"
-                Title="InfoSociety" Height="450" Width="800"
+                Title="InfoSociety" Height="500" Width="850"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
         Background="Transparent"
@@ -159,19 +159,19 @@
                                                 </TextBlock>
                                                 <TextBlock>
                                                     <Run Text="Имя: " FontSize="16" Foreground="#FFBCBEE0" />
-                                                    <Run Text="{Binding Name}" FontSize="16" Foreground="#FFBCBEE0" FontWeight="Bold"/>
+                                                    <Run Text="{Binding Name}" FontSize="16" Foreground="{StaticResource color3}" FontWeight="Bold"/>
                                                 </TextBlock>
                                                 <TextBlock>
                                                     <Run Text="Фамилия: " FontSize="16" Foreground="#FFBCBEE0" />
-                                                    <Run Text="{Binding Surname}" FontSize="16" Foreground="#FFBCBEE0" FontWeight="Bold" />
+                                                    <Run Text="{Binding Surname}" FontSize="16" Foreground="{StaticResource color3}" FontWeight="Bold" />
                                                 </TextBlock>
                                                 <TextBlock>
                                                     <Run Text="Отчество: " FontSize="16" Foreground="#FFBCBEE0" />
-                                                    <Run Text="{Binding Patronymic}" FontSize="16" Foreground="#FFBCBEE0" FontWeight="Bold" />
+                                                    <Run Text="{Binding Patronymic}" FontSize="16" Foreground="{StaticResource color3}" FontWeight="Bold" />
                                                 </TextBlock>
                                                 <TextBlock>
                                                     <Run Text="Дата рождения: " FontSize="16" Foreground="#FFBCBEE0" />
-                                                    <Run Text="{Binding DateOfBirth}" FontSize="16" Foreground="#FFBCBEE0" FontWeight="Bold" />
+                                                    <Run Text="{Binding DateOfBirth}" FontSize="16" Foreground="{StaticResource color3}" FontWeight="Bold" />
                                                 </TextBlock>
                                                 <Button x:Name="Delete_Button" 
                                                     Content="Удалить" 

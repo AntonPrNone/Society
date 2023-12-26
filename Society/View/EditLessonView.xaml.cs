@@ -33,6 +33,11 @@ namespace Society.View
                 CabinetNumber_TextBox.Text = lesson.CabinetNumber.ToString();
                 ID_Employee_TextBox.Text = lesson.ID_Employee.ToString();
             }
+
+            else
+            {
+                Delete_Button.Visibility = Visibility.Collapsed;
+            }
         }
 
         protected virtual void OnLessonUpdate()
@@ -165,6 +170,35 @@ namespace Society.View
             if (e.LeftButton == MouseButtonState.Pressed)
             {
                 DragMove();
+            }
+        }
+
+        private void Delete_Button_Click(object sender, RoutedEventArgs e)
+        {
+            // Создаем окно подтверждения
+            ErrorView confirmationView = new ErrorView("Удаление", $"Подтвердите удаление занятия");
+
+            // Открываем окно и ждем подтверждения
+            bool? result = confirmationView.ShowDialog();
+
+            // Проверяем результат подтверждения
+            if (result.HasValue && confirmationView.IsConfirmed)
+            {
+                // Если пользователь нажал "ОК" в окне подтверждения
+                bool isDeleted = DB_Interaction.DeleteLesson(lesson.ID_Lesson);
+
+                if (isDeleted)
+                {
+                    OnLessonUpdate();
+                    this.Close();
+                }
+
+                else
+                {
+                    // Если произошла ошибка при удалении, выводим сообщение об ошибке
+                    ErrorView errorView = new ErrorView("Ошибка", "Ошибка при удалении кружка");
+                    errorView.Show();
+                }
             }
         }
     }

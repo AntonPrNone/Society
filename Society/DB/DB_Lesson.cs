@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 
 public static partial class DB_Interaction
 {
@@ -49,17 +50,21 @@ public static partial class DB_Interaction
 
                     lessons.Add(lesson);
                 }
+
+                // Сортировка списка по дате и времени начала в порядке возрастания
+                lessons = lessons.OrderBy(l => DateTime.Parse(l.Date + " " + l.StartTime)).ToList();
             }
 
             return lessons;
         }
-
         catch (Exception ex)
         {
             Console.WriteLine($"Ошибка при получении уроков для кружка: {ex.Message}");
             return null;
         }
     }
+
+
 
     public static Lesson GetLessonById(int lessonId)
     {
@@ -185,4 +190,29 @@ public static partial class DB_Interaction
         }
     }
 
+    public static bool DeleteLesson(int lessonId)
+    {
+        try
+        {
+            OpenConnection();
+
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.Connection = _connection;
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "DELETE FROM Lesson_table WHERE ID_Lesson = @ID_Lesson";
+
+                cmd.Parameters.AddWithValue("@ID_Lesson", lessonId);
+
+                int rowsAffected = cmd.ExecuteNonQuery();
+
+                return rowsAffected > 0;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Ошибка при удалении урока: {ex.Message}");
+            return false;
+        }
+    }
 }

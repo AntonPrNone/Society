@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
+using System.Xml.Linq;
 
 namespace Society.View
 {
@@ -220,5 +221,34 @@ namespace Society.View
                 this.WindowState = WindowState.Maximized;
             else this.WindowState = WindowState.Normal;
         }
+
+        private void Delete_Button_Click(object sender, RoutedEventArgs e)
+        {
+            // Создаем окно подтверждения
+            ErrorView confirmationView = new ErrorView("Удаление", $"Подтвердите удаление кружка {_society.Name}");
+
+            // Открываем окно и ждем подтверждения
+            bool? result = confirmationView.ShowDialog();
+
+            // Проверяем результат подтверждения
+            if (result.HasValue && confirmationView.IsConfirmed)
+            {
+                // Если пользователь нажал "ОК" в окне подтверждения
+                bool isDeleted = DB_Interaction.DeleteSociety(_society.ID_Society);
+
+                if (isDeleted)
+                {
+                    OnSocietySaved();
+                    this.Close();
+                }
+                else
+                {
+                    // Если произошла ошибка при удалении, выводим сообщение об ошибке
+                    ErrorView errorView = new ErrorView("Ошибка", "Ошибка при удалении кружка");
+                    errorView.Show();
+                }
+            }
+        }
+
     }
 }

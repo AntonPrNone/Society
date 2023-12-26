@@ -111,6 +111,35 @@ public static partial class DB_Interaction
         }
     }
 
+    public static bool DeleteSociety(int id)
+    {
+        try
+        {
+            OpenConnection();
+
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.Connection = _connection;
+                cmd.CommandType = CommandType.Text;
+                cmd.CommandText = "DELETE FROM Society_table WHERE ID_Society = @ID";
+
+                cmd.Parameters.AddWithValue("@ID", id);
+
+                // Выполняем команду
+                int rowsAffected = cmd.ExecuteNonQuery();
+
+                // Возвращаем true, если хотя бы одна строка была удалена
+                return rowsAffected > 0;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Ошибка при удалении данных о кружке: {ex.Message}");
+            return false;
+        }
+    }
+
+
     public static SocietyClass GetSocietyById(int societyId)
     {
         try

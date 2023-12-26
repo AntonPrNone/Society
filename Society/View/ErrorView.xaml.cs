@@ -8,6 +8,7 @@ namespace Society.View
     /// </summary>
     public partial class ErrorView : Window
     {
+        public bool IsConfirmed { get; private set; } = false;
         public ErrorView(string text1, string text2)
         {
             InitializeComponent();
@@ -36,6 +37,8 @@ namespace Society.View
 
         private void Add_Button_Click(object sender, RoutedEventArgs e)
         {
+            // Устанавливаем флаг подтверждения
+            IsConfirmed = true;
             this.Close();
         }
     }

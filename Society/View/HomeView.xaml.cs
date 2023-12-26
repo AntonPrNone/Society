@@ -1,20 +1,10 @@
 ﻿using Society.Model;
 using Society.ViewModel;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Interop;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Society.View
 {
@@ -26,12 +16,16 @@ namespace Society.View
         public HomeView()
         {
             InitializeComponent();
+            this.Topmost = true;
+            this.Topmost = false;
             DataContext = new MainViewModel();
 
             if (User.ID_Role == 1)
             {
                 Employee_RadioButton.Visibility = Visibility.Collapsed;
             }
+
+
         }
 
         [DllImport("user32.dll")]
@@ -58,14 +52,6 @@ namespace Society.View
             if (this.WindowState == WindowState.Normal)
                 this.WindowState = WindowState.Maximized;
             else this.WindowState = WindowState.Normal;
-        }
-
-        private void Ellipse_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            User.ClearEmployeeID();
-            LoginView loginView = new LoginView();
-            loginView.Show();
-            Close();
         }
 
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
