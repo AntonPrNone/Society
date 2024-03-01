@@ -64,5 +64,10 @@ namespace Society.View
                 Close();
             }
         }
+
+        private void RadioButton_Checked()
+        {
+
+        }
     }
 }

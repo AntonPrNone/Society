@@ -5,6 +5,9 @@ using System.Linq;
 using System.Windows.Controls;
 using System.Windows;
 using System;
+using System.Windows.Media;
+using QRCoder.Xaml;
+using QRCoder;
 
 namespace Society.View
 {
@@ -12,7 +15,6 @@ namespace Society.View
     {
         DataTable dataTable;
         private bool isSearchBoxEmpty = true;
-
         public TeacherControl()
         {
             InitializeComponent();
